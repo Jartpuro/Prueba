@@ -1,0 +1,189 @@
+---
+title: "Informe_01"
+author: "Jhon Alexander Rojas Tavera"
+date: "2023-09-12"
+output:
+  html_document:
+    toc: yes
+    toc_float: yes
+  pdf_document:
+    toc: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+  
+  
+```{r , echo=TRUE}
+# Definir la cantidad de puntos a generar
+n <- 10000
+
+
+# Inicializar contador para contar puntos dentro del círculo
+count_inside_circle <- 0
+
+
+# Crear un vector para almacenar los colores de los puntos (rojo para fuera del círculo, verde para dentro)
+point_colors <- vector(mode = "character", length = n)
+
+
+# Crear un gráfico vacío para visualizar la simulación
+plot(1, type = "n", xlim = c(0, 1), ylim = c(0, 1), xlab = "", ylab = "", main = "Simulación de Estimación de Pi")
+
+
+# Dibujar el círculo
+draw_circle <- function() {
+  theta <- seq(0, 2 * pi, length.out = 100)
+  x_circle <- 0.5 + 0.5 * cos(theta)
+  y_circle <- 0.5 + 0.5 * sin(theta)
+  lines(x_circle, y_circle, col = "blue")
+}
+
+draw_circle()
+
+
+# Iterar para generar n coordenadas x e y y determinar si están dentro del círculo
+for (i in 1:n) {
+  
+  # Generar coordenada x de forma aleatoria (distribución uniforme en el intervalo [0, 1])
+  Xi <- runif(1, 0, 1)
+  
+  # Generar coordenada y de forma aleatoria (distribución uniforme en el intervalo [0, 1])
+  Yi <- runif(1, 0, 1)
+  
+  # Calcular el cuadrado de la distancia desde el centro
+  distancia_cuadrada <- (Xi - 0.5)^2 + (Yi - 0.5)^2
+  
+  
+  # Comprobar si el punto está dentro del círculo (distancia < 0.25)
+  if (distancia_cuadrada < 0.25) {
+    count_inside_circle <- count_inside_circle + 1
+    point_colors[i] <- "green"  # Punto dentro del círculo (verde)
+  } else {
+    point_colors[i] <- "red"  # Punto fuera del círculo (rojo)
+  }
+  
+  # Dibujar el punto en el gráfico
+  points(Xi, Yi, col = point_colors[i], pch = 19)
+}
+
+# Calcular la estimación de π/4
+estimacion_pi <- count_inside_circle / n
+
+
+# Calcular el valor estimado de π
+valor_estimado_pi <- estimacion_pi * 4
+
+
+# Imprimir los resultados en el informe
+print(paste("Estimación de π con", n, "puntos:", valor_estimado_pi))
+```
+
+
+##Prueba
+
+```{r , echo=TRUE}
+# Pseudocódigo:
+# 1. Generar n coordenadas x y n coordenadas y utilizando la distribución uniforme en el intervalo [0, 1].
+# 2. Calcular la distancia de cada punto desde el centro y determinar si está dentro del círculo.
+# 3. Contar cuántos puntos están dentro del círculo y estimar π.
+# 4. Graficar el proceso.
+
+# Paso 1: Generar n coordenadas x e y con distribución uniforme.
+n <- 10000
+X <- runif(n, 0, 1)  # Coordenadas x
+Y <- runif(n, 0, 1)  # Coordenadas y
+
+# Paso 2: Calcular la distancia de cada punto al centro y verificar si está dentro del círculo.
+count_inside_circle <- 0  # Inicializar contador de puntos dentro del círculo
+distancias <- numeric(n)  # Vector para almacenar las distancias
+
+for (i in 1:n) {
+  # Calcular la distancia al cuadrado desde el centro
+  distancia_cuadrada <- (X[i] - 0.5)^2 + (Y[i] - 0.5)^2
+  distancias[i] <- distancia_cuadrada
+  
+  # Verificar si el punto está dentro del círculo (distancia < 0.25)
+  if (distancia_cuadrada < 0.25) {
+    count_inside_circle <- count_inside_circle + 1
+  }
+}
+
+# Paso 3: Calcular la estimación de π/4 y el valor estimado de π.
+estimacion_pi <- count_inside_circle / n
+valor_estimado_pi <- estimacion_pi * 4
+
+# Paso 4: Graficar el proceso.
+# Gráfico 1: Puntos dentro y fuera del círculo
+plot(X, Y, xlim = c(0, 1), ylim = c(0, 1), xlab = "X", ylab = "Y", main = "Puntos dentro y fuera del círculo")
+points(X[distancias < 0.25], Y[distancias < 0.25], col = "green", pch = 19)  # Puntos dentro del círculo (verde)
+points(X[distancias >= 0.25], Y[distancias >= 0.25], col = "red", pch = 19)  # Puntos fuera del círculo (rojo)
+
+# Gráfico 2: Estimación de π
+par(mfrow = c(1, 1))  # Restaurar diseño de gráfico
+hist(distancias, breaks = "fd", main = "Histograma de Distancias al Cuadrado", xlab = "Distancia al Cuadrado", col = "lightblue")
+abline(v = 0.25, col = "red", lwd = 2)  # Línea para mostrar el radio del círculo
+
+```
+
+
+
+##Prueba_03
+
+```{r , echo=TRUE}
+# Definir la cantidad de puntos a generar
+n <- 10000
+
+# Inicializar contador para contar puntos dentro del círculo
+count_inside_circle <- 0
+
+# Crear un vector para almacenar los colores de los puntos (rojo para fuera del círculo, verde para dentro)
+point_colors <- vector(mode = "character", length = n)
+
+# Crear un gráfico vacío para visualizar la simulación
+plot(1, type = "n", xlim = c(0, 1), ylim = c(0, 1), xlab = "", ylab = "", main = "Simulación de Estimación de Pi")
+
+# Dibujar el círculo
+draw_circle <- function() {
+  theta <- seq(0, 2 * pi, length.out = 100)
+  x_circle <- 0.5 + 0.5 * cos(theta)
+  y_circle <- 0.5 + 0.5 * sin(theta)
+  lines(x_circle, y_circle, col = "blue")
+}
+
+draw_circle()
+
+# Iterar para generar n coordenadas x e y y determinar si están dentro del círculo
+for (i in 1:n) {
+  
+  # Generar coordenada x de forma aleatoria (distribución uniforme en el intervalo [0, 1])
+  Xi <- runif(1, 0, 1)
+  
+  # Generar coordenada y de forma aleatoria (distribución uniforme en el intervalo [0, 1])
+  Yi <- runif(1, 0, 1)
+  
+  # Calcular el cuadrado de la distancia desde el centro
+  distancia_cuadrada <- (Xi - 0.5)^2 + (Yi - 0.5)^2
+  
+  # Comprobar si el punto está dentro del círculo (distancia < 0.25)
+  if (distancia_cuadrada < 0.25) {
+    count_inside_circle <- count_inside_circle + 1
+    point_colors[i] <- "green"  # Punto dentro del círculo (verde)
+  } else {
+    point_colors[i] <- "red"  # Punto fuera del círculo (rojo)
+  }
+  
+  # Dibujar el punto en el gráfico
+  points(Xi, Yi, col = point_colors[i], pch = 19)
+}
+
+# Calcular la estimación de π/4
+estimacion_pi <- count_inside_circle / n
+
+# Calcular el valor estimado de π
+valor_estimado_pi <- estimacion_pi * 4
+
+# Imprimir los resultados en el informe
+print(paste("Estimación de π con", n, "puntos:", valor_estimado_pi))
+```
